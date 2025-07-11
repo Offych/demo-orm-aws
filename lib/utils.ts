@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export interface ApiSubmitResult<T = any> {
+export interface ApiSubmitResult<T = unknown> {
   success: boolean
   data?: T
   error?: string
@@ -17,9 +17,9 @@ export interface ApiSubmitResult<T = any> {
  * @param data - Data to send (object)
  * @param options - Optional: method, headers, etc.
  */
-export async function submitForm<T = any>(
+export async function submitForm<T = unknown>(
   endpoint: string,
-  data: Record<string, any>,
+  data: Record<string, unknown>,
   options?: { method?: string; headers?: Record<string, string> }
 ): Promise<ApiSubmitResult<T>> {
   try {

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Eye, EyeOff, Trash2 } from "lucide-react"
+import { Eye, EyeOff, Minus } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 import { apiKeyFormDefaults } from "@/lib/apiKeyFormDefaults"
 // import { submitForm } from "@/lib/utils"
@@ -179,7 +179,7 @@ export function ApiKeyForm() {
                   onClick={() => handleDeleteSecret(i)}
                   aria-label="Delete API secret"
                 >
-                  <Trash2 className="w-5 h-5" />
+                  <Minus className="w-5 h-5" />
                 </Button>
               )}
             </div>
