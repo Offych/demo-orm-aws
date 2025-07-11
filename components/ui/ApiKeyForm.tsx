@@ -7,7 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Eye, EyeOff, Minus } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 import { apiKeyFormDefaults } from "@/lib/apiKeyFormDefaults"
-// import { submitForm } from "@/lib/utils"
+import { submitForm } from "@/lib/utils"
 
 interface FormValues {
   apiKey: string
@@ -64,6 +64,7 @@ export function ApiKeyForm() {
   const maxSecrets = 20
   const [isSubmitting, setIsSubmitting] = useState(false)
   const apiKeyRef = useRef<HTMLInputElement>(null)
+  const [submitResult, setSubmitResult] = useState<{ success: boolean; error?: string } | null>(null)
 
   useEffect(() => {
     apiKeyRef.current?.focus()
@@ -73,19 +74,27 @@ export function ApiKeyForm() {
 
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true)
-    storeFormDataLocally(data)
-    reset({
-      apiKey: "",
-      apiSecrets: [""],
-      environment: "",
-      project: "",
-      team: "",
-      provider: "",
-      modelType: "",
-      reminderToUpgrade: false,
-    })
-    setShowSecrets([true])
-    setIsSubmitting(false)
+    setSubmitResult(null)
+    try {
+      const result = await submitForm("/api/apikey", data as unknown as Record<string, unknown>)
+      setSubmitResult(result)
+      if (result.success) {
+        storeFormDataLocally(data)
+        reset({
+          apiKey: "",
+          apiSecrets: [""],
+          environment: "",
+          project: "",
+          team: "",
+          provider: "",
+          modelType: "",
+          reminderToUpgrade: false,
+        })
+        setShowSecrets([true])
+      }
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleAddSecret = () => {
@@ -334,10 +343,14 @@ export function ApiKeyForm() {
         />
         <label htmlFor="reminder-to-upgrade" className="font-medium">Reminder to upgrade</label>
       </div>
-      <Button type="submit" className="w-full" disabled={!isValid || isSubmitting}>
-        {isSubmitting && <span className="animate-spin mr-2 w-4 h-4 border-2 border-t-transparent border-current rounded-full inline-block align-middle" />}
-        Submit
+      <Button type="submit" disabled={isSubmitting || !isValid} className="w-full">
+        {isSubmitting ? "Submitting..." : "Submit"}
       </Button>
+      {submitResult && (
+        <div className={submitResult.success ? "text-green-600 mt-2" : "text-red-600 mt-2"}>
+          {submitResult.success ? "API Key saved!" : submitResult.error || "Error saving API Key."}
+        </div>
+      )}
     </form>
   )
 } 
