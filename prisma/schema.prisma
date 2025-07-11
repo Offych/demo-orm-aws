@@ -14,7 +14,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model APIKEY {
+model ApiKey {
   id                String   @id @default(uuid())
   apiKey            String
   apiSecret         String

@@ -120,7 +120,7 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.APIKEYScalarFieldEnum = {
+exports.Prisma.ApiKeyScalarFieldEnum = {
   id: 'id',
   apiKey: 'apiKey',
   apiSecret: 'apiSecret',
@@ -146,7 +146,7 @@ exports.Prisma.QueryMode = {
 
 
 exports.Prisma.ModelName = {
-  APIKEY: 'APIKEY'
+  ApiKey: 'ApiKey'
 };
 
 /**
